@@ -5,7 +5,7 @@ import { Session } from '@prisma/client'
 
 interface SessionWithRelations extends Session {
     room: { id: string; name: string } | null
-    speakers: { speaker: { id: string; name: string; photoUrl: string | null } }[]
+    speakers: { speaker: { id: string; name: string; photo: string | null } }[]
 }
 
 interface SessionGridProps {

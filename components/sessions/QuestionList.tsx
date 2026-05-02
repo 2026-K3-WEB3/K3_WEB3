@@ -32,7 +32,7 @@ export function QuestionList({ questions, onUpvote, isLive }: QuestionListProps)
                             <p className="text-gray-800 mb-2">{question.content}</p>
                             <div className="flex items-center gap-4 text-sm text-gray-500">
                 <span>
-                  {question.authorName ? `👤 ${question.authorName}` : '🔒 Anonyme'}
+                  {question.author ? `👤 ${question.author}` : '🔒 Anonyme'}
                 </span>
                                 <span>🕒 {new Date(question.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
                             </div>

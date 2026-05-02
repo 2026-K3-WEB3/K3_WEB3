@@ -26,9 +26,9 @@ async function getSession(sessionId: string) {
 export default async function SessionDetailPage({
                                                     params
                                                 }: {
-    params: { sessionId: string; id: string }
+    params: { sessionID: string; id: string }
 }) {
-    const session = await getSession(params.sessionId)
+    const session = await getSession(params.sessionID)
 
     if (!session) {
         notFound()
@@ -116,9 +116,9 @@ export default async function SessionDetailPage({
                                         href={`/speakers/${speaker.id}`}
                                         className="flex items-center gap-3 bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors"
                                     >
-                                        {speaker.photoUrl ? (
+                                        {speaker.photo ? (
                                             <img
-                                                src={speaker.photoUrl}
+                                                src={speaker.photo}
                                                 alt={speaker.name}
                                                 className="w-10 h-10 rounded-full object-cover"
                                             />

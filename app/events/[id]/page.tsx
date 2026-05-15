@@ -70,7 +70,12 @@ export default async function EventDetailPage({ params }: { params: { id: string
 
             {/* Schedule Section */}
             <section className="container mx-auto px-4 py-12">
-                <h2 className="text-2xl font-bold mb-8">Programme</h2>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                    <h2 className="text-2xl font-bold">Programme</h2>
+                    <a href={`/events/${event.id}/schedule`} className="bg-blue-100 text-blue-700 hover:bg-blue-200 px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2">
+                        📅 Vue Multi-Track (Salles)
+                    </a>
+                </div>
 
                 {Object.entries(sessionsByDate).map(([dateKey, sessions]) => (
                     <div key={dateKey} className="mb-8">

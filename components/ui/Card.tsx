@@ -5,7 +5,7 @@ interface CardProps {
     className?: string
     onClick?: () => void
 }
-
+//
 export function Card({ children, className = '', onClick }: CardProps) {
     return (
         <div

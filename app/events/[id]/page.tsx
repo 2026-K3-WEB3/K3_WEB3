@@ -62,8 +62,8 @@ export default async function EventDetailPage({ params }: { params: { id: string
                         {event.description}
                     </p>
                     <div className="space-y-2 text-sm opacity-80">
-                        <p>📅 {formatDate(event.startDate)} - {formatDate(event.endDate)}</p>
-                        {event.location && <p>📍 {event.location}</p>}
+                        <p> {formatDate(event.startDate)} - {formatDate(event.endDate)}</p>
+                        {event.location && <p> {event.location}</p>}
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@ export default async function EventDetailPage({ params }: { params: { id: string
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <h2 className="text-2xl font-bold">Programme</h2>
                     <a href={`/events/${event.id}/schedule`} className="bg-blue-100 text-blue-700 hover:bg-blue-200 px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2">
-                        📅 Vue Multi-Track (Salles)
+                        Vue Multi-Track (Salles)
                     </a>
                 </div>
 

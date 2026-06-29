@@ -24,7 +24,7 @@ export default async function EventsPage() {
   const events = await getEvents()
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div className="animate-fade-in" style={{ minHeight: '100vh' }}>
       <section
         style={{
           position: 'relative',
@@ -87,10 +87,13 @@ export default async function EventsPage() {
         }}
       >
         {events.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
-            <Calendar size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
-            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
-              Aucun événement pour le moment.
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <Calendar size={28} style={{ opacity: 0.4 }} />
+            </div>
+            <p className="empty-state-title">Aucun événement pour le moment</p>
+            <p className="empty-state-text">
+              Les événements seront listés ici une fois créés.
             </p>
           </div>
         ) : (

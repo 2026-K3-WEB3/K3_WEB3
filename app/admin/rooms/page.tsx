@@ -83,24 +83,7 @@ export default async function AdminRoomsPage() {
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <Link
                   href={`/admin/rooms/${room.id}/edit`}
-                  style={{
-                    flex: 1,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.35rem',
-                    padding: '0.45rem',
-                    borderRadius: 'var(--radius-md)',
-                    background: 'rgba(16,185,129,0.12)',
-                    border: '1px solid rgba(16,185,129,0.3)',
-                    fontSize: '0.8125rem',
-                    fontWeight: 600,
-                    color: '#a7f3d0',
-                    textDecoration: 'none',
-                    transition: 'background var(--transition-fast)',
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(16,185,129,0.22)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(16,185,129,0.12)' }}
+                  className="admin-room-edit"
                 >
                   <Pencil size={12} />
                   Modifier

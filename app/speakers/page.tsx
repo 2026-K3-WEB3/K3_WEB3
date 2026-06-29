@@ -24,7 +24,7 @@ export default async function SpeakersPage() {
   const speakers = await getSpeakers()
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div className="animate-fade-in" style={{ minHeight: '100vh' }}>
       <section
         style={{
           position: 'relative',
@@ -87,10 +87,13 @@ export default async function SpeakersPage() {
         }}
       >
         {speakers.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
-            <Users size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
-            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
-              Aucun intervenant enregistré pour le moment.
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <Users size={28} style={{ opacity: 0.4 }} />
+            </div>
+            <p className="empty-state-title">Aucun intervenant pour le moment</p>
+            <p className="empty-state-text">
+              Les intervenants seront listés ici une fois ajoutés.
             </p>
           </div>
         ) : (
@@ -110,18 +113,21 @@ export default async function SpeakersPage() {
               >
                 <div style={{ padding: '2rem 1.5rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.75rem' }}>
                   {speaker.photo ? (
-                    <img
-                      src={speaker.photo}
-                      alt={speaker.name}
-                      style={{
-                        width: '80px',
-                        height: '80px',
-                        borderRadius: '50%',
-                        objectFit: 'cover',
-                        border: '2px solid rgba(99,102,241,0.3)',
-                        boxShadow: '0 0 0 4px rgba(99,102,241,0.1)',
-                      }}
-                    />
+                    <div className="img-zoom" style={{ borderRadius: '50%', width: '80px', height: '80px' }}>
+                      <img
+                        src={speaker.photo}
+                        alt={speaker.name}
+                        style={{
+                          width: '80px',
+                          height: '80px',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          border: '2px solid rgba(99,102,241,0.3)',
+                          boxShadow: '0 0 0 4px rgba(99,102,241,0.1)',
+                          transition: 'transform var(--transition-base)',
+                        }}
+                      />
+                    </div>
                   ) : (
                     <div
                       style={{

@@ -41,7 +41,7 @@ export default async function MultiTrackSchedulePage({ params }: { params: Promi
     const now = new Date()
 
     return (
-        <div style={{ minHeight: '100vh' }}>
+        <div className="animate-fade-in" style={{ minHeight: '100vh' }}>
             <section
                 style={{
                     position: 'relative',

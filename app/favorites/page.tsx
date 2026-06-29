@@ -58,7 +58,7 @@ export default function FavoritesPage() {
     new Date(dateStr).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div className="animate-fade-in" style={{ minHeight: '100vh' }}>
       <section
         style={{
           position: 'relative',
@@ -135,29 +135,18 @@ export default function FavoritesPage() {
             Chargement...
           </div>
         ) : sessions.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
-            <Star size={48} style={{ margin: '0 auto 1rem', opacity: 0.25 }} />
-            <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
-              Aucune session favorite
-            </h2>
-            <p style={{ fontSize: '0.875rem', marginBottom: '1.75rem' }}>
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <Star size={28} style={{ opacity: 0.4 }} />
+            </div>
+            <p className="empty-state-title">Aucune session favorite</p>
+            <p className="empty-state-text">
               Ajoutez des sessions à vos favoris depuis le planning d&apos;un événement.
             </p>
             <Link
               href="/"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.65rem 1.5rem',
-                borderRadius: 'var(--radius-md)',
-                background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))',
-                color: '#fff',
-                fontWeight: 600,
-                fontSize: '0.9rem',
-                textDecoration: 'none',
-                boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
-              }}
+              className="btn-primary"
+              style={{ marginTop: '0.75rem' }}
             >
               <Calendar size={15} />
               Voir les événements

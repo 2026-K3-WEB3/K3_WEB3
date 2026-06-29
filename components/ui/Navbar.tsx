@@ -44,6 +44,16 @@ export function Navbar() {
     transition: 'background var(--transition-base)',
   }
 
+  const navbarGlowStyle: React.CSSProperties = {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '1px',
+    background: 'linear-gradient(90deg, transparent, var(--accent-from), var(--accent-to), transparent)',
+    opacity: 0.6,
+  }
+
   const containerStyle: React.CSSProperties = {
     maxWidth: '1200px',
     margin: '0 auto',
@@ -101,7 +111,8 @@ export function Navbar() {
   }
 
   return (
-    <header style={navbarStyle}>
+    <header style={{ ...navbarStyle, position: 'sticky' }}>
+      <div style={navbarGlowStyle} />
       <div style={containerStyle}>
         <Link href="/" style={logoStyle}>
           <Calendar size={20} style={{ color: 'var(--accent-from)', WebkitTextFillColor: 'var(--accent-from)' }} />

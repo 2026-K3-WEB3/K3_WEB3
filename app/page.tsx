@@ -40,6 +40,19 @@ export default async function HomePage() {
           }}
         />
         <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: 0.4,
+            backgroundImage: `
+              linear-gradient(rgba(99,102,241,0.06) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(99,102,241,0.06) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
           className="animate-float"
           style={{
             position: 'absolute',
@@ -162,10 +175,13 @@ export default async function HomePage() {
         </div>
 
         {events.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
-            <Calendar size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
-            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
-              Aucun événement à venir pour le moment.
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <Calendar size={28} style={{ opacity: 0.4 }} />
+            </div>
+            <p className="empty-state-title">Aucun événement à venir</p>
+            <p className="empty-state-text">
+              Les événements programmés apparaîtront ici une fois créés depuis l&apos;interface d&apos;administration.
             </p>
           </div>
         ) : (

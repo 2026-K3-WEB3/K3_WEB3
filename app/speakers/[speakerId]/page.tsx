@@ -47,7 +47,7 @@ export default async function SpeakerDetailPage({
     })
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div className="animate-fade-in" style={{ minHeight: '100vh' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
         <Link href="/speakers" className="back-link" style={{ marginBottom: '2rem', display: 'inline-flex' }}>
           <ArrowLeft size={14} />

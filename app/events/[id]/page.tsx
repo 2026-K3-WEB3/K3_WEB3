@@ -42,7 +42,7 @@ export default async function EventDetailPage({
   }, {} as Record<string, typeof event.sessions>)
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div className="animate-fade-in" style={{ minHeight: '100vh' }}>
       <section
         style={{
           position: 'relative',

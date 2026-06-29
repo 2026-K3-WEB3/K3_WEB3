@@ -49,19 +49,32 @@ export default function AdminLoginPage() {
       }}
     >
       <div
-        style={{
-          position: 'absolute',
-          top: '-10%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '500px',
-          height: '500px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)',
-          filter: 'blur(50px)',
-          pointerEvents: 'none',
-        }}
-      />
+          style={{
+            position: 'absolute',
+            top: '-10%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '500px',
+            height: '500px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)',
+            filter: 'blur(50px)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: 0.3,
+            backgroundImage: `
+              linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+            pointerEvents: 'none',
+          }}
+        />
 
       <div style={{ width: '100%', maxWidth: '400px', position: 'relative' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>

@@ -32,7 +32,7 @@ export default async function RoomPage({ params }: { params: Promise<{ id: strin
   }, {} as Record<string, typeof room.sessions>)
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div className="animate-fade-in" style={{ minHeight: '100vh' }}>
       <section
         style={{
           position: 'relative',
@@ -95,10 +95,13 @@ export default async function RoomPage({ params }: { params: Promise<{ id: strin
         }}
       >
         {Object.entries(sessionsByDate).length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
-            <MapPin size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
-            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
-              Aucune session prévue dans cette salle.
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <MapPin size={28} style={{ opacity: 0.4 }} />
+            </div>
+            <p className="empty-state-title">Aucune session prévue</p>
+            <p className="empty-state-text">
+              Il n&apos;y a pas encore de session programmée dans cette salle.
             </p>
           </div>
         ) : (

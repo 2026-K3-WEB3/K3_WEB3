@@ -1,11 +1,12 @@
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, Clock, MapPin, Users } from 'lucide-react'
+import { Calendar, Clock, MapPin, Users, ArrowLeft } from 'lucide-react'
 
-export default async function RoomPage({ params }: { params: { id: string } }) {
+export default async function RoomPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const room = await prisma.room.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       sessions: {
         include: {
@@ -21,7 +22,6 @@ export default async function RoomPage({ params }: { params: { id: string } }) {
 
   const now = new Date()
 
-  // Group sessions by date
   const sessionsByDate = room.sessions.reduce((acc, session) => {
     const dateKey = session.startTime.toDateString()
     if (!acc[dateKey]) {
@@ -32,30 +32,91 @@ export default async function RoomPage({ params }: { params: { id: string } }) {
   }, {} as Record<string, typeof room.sessions>)
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <section className="bg-emerald-600 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-3 mb-4">
-            <MapPin className="w-8 h-8" />
-            <h1 className="text-3xl md:text-4xl font-bold">{room.name}</h1>
+    <div style={{ minHeight: '100vh' }}>
+      <section
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          padding: '5rem 1.5rem 4rem',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(16,185,129,0.14) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        <div style={{ position: 'relative', maxWidth: '640px', margin: '0 auto' }}>
+          <div
+            style={{
+              width: '52px',
+              height: '52px',
+              borderRadius: 'var(--radius-lg)',
+              background: 'linear-gradient(135deg, #10b981, #059669)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem',
+              boxShadow: '0 4px 20px rgba(16,185,129,0.4)',
+            }}
+          >
+            <MapPin size={24} color="#fff" />
           </div>
-          <p className="text-lg opacity-90">
-            Planning des sessions pour cette salle
+          <h1
+            className="animate-slide-up"
+            style={{
+              fontSize: 'clamp(2rem, 5vw, 3rem)',
+              fontWeight: 900,
+              letterSpacing: '-0.025em',
+              color: 'var(--text-primary)',
+              marginBottom: '0.75rem',
+            }}
+          >
+            {room.name}
+          </h1>
+          <p
+            className="animate-slide-up"
+            style={{ color: 'var(--text-secondary)', fontSize: '1rem', animationDelay: '80ms' }}
+          >
+            Planning des sessions pour cette salle.
           </p>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <section
+        style={{
+          maxWidth: '800px',
+          margin: '0 auto',
+          padding: '1rem 1.5rem 5rem',
+        }}
+      >
         {Object.entries(sessionsByDate).length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
-            <p className="text-lg">Aucune session prévue dans cette salle.</p>
+          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
+            <MapPin size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
+            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
+              Aucune session prévue dans cette salle.
+            </p>
           </div>
         ) : (
-          <div className="space-y-12">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
             {Object.entries(sessionsByDate).map(([date, sessions]) => (
               <div key={date}>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Calendar className="w-6 h-6 text-emerald-600" />
+                <h2
+                  style={{
+                    fontSize: '1.25rem',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '1.5rem',
+                  }}
+                >
+                  <Calendar size={18} style={{ color: '#10b981' }} />
                   {new Date(date).toLocaleDateString('fr-FR', {
                     weekday: 'long',
                     day: 'numeric',
@@ -63,40 +124,72 @@ export default async function RoomPage({ params }: { params: { id: string } }) {
                     year: 'numeric'
                   })}
                 </h2>
-                <div className="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {sessions.map((session) => {
                     const isLive = now >= session.startTime && now <= session.endTime
-                    const isPast = now > session.endTime
                     return (
-                      <div key={session.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                        <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 border-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 ${isLive ? 'bg-red-500 animate-pulse' : isPast ? 'bg-gray-300' : 'bg-emerald-500'}`}>
-                          {isLive && <div className="w-3 h-3 bg-white rounded-full"></div>}
-                        </div>
-                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow">
-                          <div className="flex items-center justify-between mb-2">
-                            <time className="text-sm font-bold text-emerald-600 flex items-center gap-1.5">
-                              <Clock className="w-4 h-4" />
-                              {new Date(session.startTime).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                            </time>
-                            {isLive && (
-                              <span className="bg-red-100 text-red-600 text-xs font-bold px-2.5 py-0.5 rounded-full">
-                                EN COURS
-                              </span>
-                            )}
-                          </div>
-                          <h3 className="font-bold text-lg text-gray-900 mb-1">
-                            <Link href={`/events/${session.eventId}/sessions/${session.id}`} className="hover:text-emerald-600 transition-colors">
-                              {session.title}
-                            </Link>
-                          </h3>
-                          <p className="text-sm text-gray-500 mb-3 line-clamp-2">{session.event.title}</p>
-                          {session.speakers.length > 0 && (
-                            <div className="flex items-center gap-2 mt-4 text-sm text-gray-600">
-                              <Users className="w-4 h-4 text-gray-400" />
-                              {session.speakers.map(s => s.speaker.name).join(', ')}
-                            </div>
+                      <div
+                        key={session.id}
+                        className="animate-slide-up"
+                        style={{
+                          background: 'var(--bg-surface)',
+                          borderRadius: 'var(--radius-lg)',
+                          border: '1px solid var(--border-subtle)',
+                          padding: '1.25rem 1.5rem',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '0.75rem',
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.35rem',
+                              fontSize: '0.8rem',
+                              color: '#10b981',
+                              fontWeight: 600,
+                            }}
+                          >
+                            <Clock size={12} />
+                            {new Date(session.startTime).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} – {new Date(session.endTime).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                          {isLive && (
+                            <span
+                              style={{
+                                background: 'rgba(239,68,68,0.15)',
+                                border: '1px solid rgba(239,68,68,0.3)',
+                                color: '#f87171',
+                                fontSize: '0.7rem',
+                                fontWeight: 700,
+                                padding: '0.2rem 0.6rem',
+                                borderRadius: '99px',
+                                letterSpacing: '0.05em',
+                              }}
+                            >
+                              EN COURS
+                            </span>
                           )}
                         </div>
+
+                        <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                          <Link
+                            href={`/events/${session.eventId}/sessions/${session.id}`}
+                            className="room-session-link"
+                          >
+                            {session.title}
+                          </Link>
+                        </h3>
+
+                        <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{session.event.title}</p>
+
+                        {session.speakers.length > 0 && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                            <Users size={12} />
+                            <span>{session.speakers.map(s => s.speaker.name).join(', ')}</span>
+                          </div>
+                        )}
                       </div>
                     )
                   })}
@@ -105,7 +198,7 @@ export default async function RoomPage({ params }: { params: { id: string } }) {
             ))}
           </div>
         )}
-      </div>
+      </section>
     </div>
   )
 }

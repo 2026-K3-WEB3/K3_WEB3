@@ -106,15 +106,7 @@ export default async function SpeakersPage() {
               <Link
                 key={speaker.id}
                 href={`/speakers/${speaker.id}`}
-                className="card-hover animate-slide-up"
-                style={{
-                  display: 'block',
-                  textDecoration: 'none',
-                  background: 'var(--bg-surface)',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px solid var(--border-subtle)',
-                  overflow: 'hidden',
-                }}
+                className="speaker-card animate-slide-up"
               >
                 <div style={{ padding: '2rem 1.5rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.75rem' }}>
                   {speaker.photo ? (

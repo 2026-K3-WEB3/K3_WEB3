@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+    await params
     const body = await req.json()
     const question = await prisma.question.update({
         where: { id: body.questionId },

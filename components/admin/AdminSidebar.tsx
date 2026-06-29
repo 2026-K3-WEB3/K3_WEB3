@@ -29,118 +29,55 @@ export function AdminSidebar() {
   }
 
   return (
-    <aside
-      style={{
-        width: '260px',
-        minHeight: '100vh',
-        background: 'var(--bg-surface)',
-        borderRight: '1px solid var(--border-subtle)',
-        display: 'flex',
-        flexDirection: 'column',
-        flexShrink: 0,
-      }}
-    >
-      <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-subtle)' }}>
-        <Link href="/admin" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
-          <div
-            style={{
-              width: '36px',
-              height: '36px',
-              background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))',
-              borderRadius: 'var(--radius-md)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(99,102,241,0.3)',
-            }}
-          >
-            <Calendar size={18} color="#fff" />
+    <aside className="w-64 min-h-screen bg-slate-900 text-white flex flex-col shadow-xl flex-shrink-0">
+      {/* Logo */}
+      <div className="p-6 border-b border-white/10">
+        <Link href="/admin" className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+            <Calendar className="w-5 h-5 text-slate-900" />
           </div>
           <div>
-            <p style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.875rem' }}>EventSync</p>
-            <p style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: 600 }}>Administration</p>
+            <p className="font-bold text-white text-sm">EventSync</p>
+            <p className="text-xs text-yellow-500/80">Administration</p>
           </div>
         </Link>
       </div>
 
-      <nav style={{ flex: 1, padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+      {/* Nav */}
+      <nav className="flex-1 p-4 space-y-1">
         {navItems.map(({ href, label, icon: Icon, exact }) => {
           const active = isActive(href, exact)
           return (
             <Link
               key={href}
               href={href}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '0.65rem 0.85rem',
-                borderRadius: 'var(--radius-md)',
-                fontSize: '0.875rem',
-                fontWeight: active ? 700 : 500,
-                textDecoration: 'none',
-                color: active ? '#a5b4fc' : 'var(--text-secondary)',
-                background: active ? 'rgba(99,102,241,0.12)' : 'transparent',
-                borderLeft: active ? '3px solid var(--accent-from)' : '3px solid transparent',
-                transition: 'all var(--transition-fast)',
-              }}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${active
+                  ? 'bg-yellow-500 text-slate-900 shadow-sm font-bold'
+                  : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                }`}
             >
-              <Icon size={16} style={{ flexShrink: 0 }} />
-              <span style={{ flex: 1 }}>{label}</span>
-              {active && <ChevronRight size={14} style={{ opacity: 0.7 }} />}
+              <Icon className="w-4 h-4 flex-shrink-0" />
+              <span className="flex-1">{label}</span>
+              {active && <ChevronRight className="w-3.5 h-3.5 opacity-70" />}
             </Link>
           )
         })}
       </nav>
 
-      <div style={{ padding: '1rem', borderTop: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+      {/* Bottom */}
+      <div className="p-4 border-t border-white/10 space-y-1">
         <Link
           href="/"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            padding: '0.65rem 0.85rem',
-            borderRadius: 'var(--radius-md)',
-            fontSize: '0.875rem',
-            color: 'var(--text-muted)',
-            textDecoration: 'none',
-            transition: 'all var(--transition-fast)',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-400 hover:bg-white/10 hover:text-white transition-all"
         >
-          <Home size={16} />
+          <Home className="w-4 h-4" />
           Voir le site public
         </Link>
         <button
           onClick={() => signOut({ callbackUrl: '/admin/login' })}
-          style={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            padding: '0.65rem 0.85rem',
-            borderRadius: 'var(--radius-md)',
-            fontSize: '0.875rem',
-            color: 'var(--text-muted)',
-            background: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            textAlign: 'left',
-            fontFamily: 'inherit',
-            transition: 'all var(--transition-fast)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(239,68,68,0.12)'
-            e.currentTarget.style.color = '#f87171'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.color = 'var(--text-muted)'
-          }}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-400 hover:bg-red-500/20 hover:text-red-400 transition-all"
         >
-          <LogOut size={16} />
+          <LogOut className="w-4 h-4" />
           Déconnexion
         </button>
       </div>

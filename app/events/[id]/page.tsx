@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/prisma'
-import { SessionGrid } from '@/components/events/SessionGrid'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, MapPin, LayoutGrid } from 'lucide-react'
+import { SessionGrid } from '@/components/events/SessionGrid'
+import { Calendar, MapPin, LayoutGrid, ArrowLeft } from 'lucide-react'
 
 async function getEvent(id: string) {
   const event = await prisma.event.findUnique({
@@ -171,25 +171,7 @@ export default async function EventDetailPage({
             </h2>
           </div>
 
-          <Link
-            href={`/events/${event.id}/schedule`}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              padding: '0.45rem 1rem',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(99,102,241,0.12)',
-              border: '1px solid rgba(99,102,241,0.3)',
-              fontSize: '0.8125rem',
-              fontWeight: 600,
-              color: '#a5b4fc',
-              textDecoration: 'none',
-              transition: 'all var(--transition-fast)',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(99,102,241,0.2)' }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(99,102,241,0.12)' }}
-          >
+          <Link href={`/events/${event.id}/schedule`} className="event-detail-link">
             <LayoutGrid size={14} />
             Vue multi-salles
           </Link>

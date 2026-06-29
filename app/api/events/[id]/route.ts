@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
     const event = await prisma.event.findUnique({
-        where: { id: params.id },
+        where: { id },
         include: {
             sessions: {
                 include: {
@@ -18,13 +19,15 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     return NextResponse.json(event)
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
     const body = await req.json()
-    const event = await prisma.event.update({ where: { id: params.id }, data: body })
+    const event = await prisma.event.update({ where: { id }, data: body })
     return NextResponse.json(event)
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-    await prisma.event.delete({ where: { id: params.id } })
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
+    await prisma.event.delete({ where: { id } })
     return NextResponse.json({ message: "Deleted" })
 }

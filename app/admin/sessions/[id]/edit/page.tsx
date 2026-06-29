@@ -7,7 +7,7 @@ export default async function EditSessionPage({ params }: { params: { id: string
     where: { id: params.id },
     include: { speakers: true }
   })
-  
+
   if (!session) notFound()
 
   const [rooms, speakers, events] = await Promise.all([
@@ -17,11 +17,11 @@ export default async function EditSessionPage({ params }: { params: { id: string
   ])
 
   return (
-    <EditSessionForm 
-      session={session} 
-      rooms={rooms} 
-      speakers={speakers} 
-      events={events} 
+    <EditSessionForm
+      session={session}
+      rooms={rooms}
+      speakers={speakers}
+      events={events}
     />
   )
 }

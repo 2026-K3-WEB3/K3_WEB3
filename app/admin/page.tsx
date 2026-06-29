@@ -55,21 +55,7 @@ export default async function AdminDashboardPage() {
         }}
       >
         {statCards.map(({ label, value, icon: Icon, color, href }) => (
-          <Link
-            key={label}
-            href={href}
-            className="card-hover animate-slide-up"
-            style={{
-              background: 'var(--bg-surface)',
-              border: '1px solid var(--border-subtle)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '1.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              textDecoration: 'none',
-            }}
-          >
+          <Link key={label} href={href} className="stat-card animate-slide-up">
             <div
               style={{
                 width: '48px',
@@ -108,30 +94,16 @@ export default async function AdminDashboardPage() {
         </h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
           {[
-            { href: '/admin/events/new', label: 'Nouvel événement', from: 'var(--accent-from)', to: 'var(--accent-to)' },
-            { href: '/admin/sessions/new', label: 'Nouvelle session', from: '#6366f1', to: '#4f46e5' },
-            { href: '/admin/speakers/new', label: 'Nouvel intervenant', from: '#8b5cf6', to: '#7c3aed' },
-            { href: '/admin/rooms/new', label: 'Nouvelle salle', from: '#10b981', to: '#059669' },
-          ].map(({ href, label, from, to }) => (
+            { href: '/admin/events/new', label: 'Nouvel événement', bg: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))' },
+            { href: '/admin/sessions/new', label: 'Nouvelle session', bg: 'linear-gradient(135deg, #6366f1, #4f46e5)' },
+            { href: '/admin/speakers/new', label: 'Nouvel intervenant', bg: 'linear-gradient(135deg, #8b5cf6, #7c3aed)' },
+            { href: '/admin/rooms/new', label: 'Nouvelle salle', bg: 'linear-gradient(135deg, #10b981, #059669)' },
+          ].map(({ href, label, bg }) => (
             <Link
               key={href}
               href={href}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.6rem 1.25rem',
-                borderRadius: 'var(--radius-md)',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                color: '#fff',
-                textDecoration: 'none',
-                background: `linear-gradient(135deg, ${from}, ${to})`,
-                boxShadow: `0 4px 12px ${from}25`,
-                transition: 'all var(--transition-fast)',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = '' }}
+              className="quick-action"
+              style={{ background: bg }}
             >
               <Plus size={16} />
               {label}
@@ -150,12 +122,7 @@ export default async function AdminDashboardPage() {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Événements récents</h2>
-          <Link
-            href="/admin/events"
-            style={{ fontSize: '0.85rem', color: '#a5b4fc', textDecoration: 'none', fontWeight: 600 }}
-          >
-            Voir tout →
-          </Link>
+          <Link href="/admin/events" className="admin-recent-edit">Voir tout →</Link>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {stats.recentEvents.length === 0 ? (
@@ -182,22 +149,7 @@ export default async function AdminDashboardPage() {
                     {event.sessions.length} session{event.sessions.length !== 1 ? 's' : ''} · {event.location || 'Lieu non spécifié'}
                   </p>
                 </div>
-                <Link
-                  href={`/admin/events/${event.id}/edit`}
-                  style={{
-                    fontSize: '0.8rem',
-                    color: '#a5b4fc',
-                    background: 'rgba(99,102,241,0.12)',
-                    border: '1px solid rgba(99,102,241,0.25)',
-                    padding: '0.35rem 0.85rem',
-                    borderRadius: 'var(--radius-sm)',
-                    textDecoration: 'none',
-                    fontWeight: 600,
-                    transition: 'all var(--transition-fast)',
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(99,102,241,0.2)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(99,102,241,0.12)' }}
-                >
+                <Link href={`/admin/events/${event.id}/edit`} className="admin-recent-edit">
                   Modifier
                 </Link>
               </div>

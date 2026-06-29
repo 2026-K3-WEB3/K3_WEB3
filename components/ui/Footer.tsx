@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Calendar, Github } from 'lucide-react'
+import { Calendar} from 'lucide-react'
 
 export function Footer() {
   return (

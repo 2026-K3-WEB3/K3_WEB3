@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Calendar, ExternalLink } from 'lucide-react'
+import { ArrowLeft, Calendar, ExternalLink, Clock, MapPin } from 'lucide-react'
 import { LiveBadge } from '@/components/sessions/LiveBadge'
 
 async function getSpeaker(id: string) {
@@ -25,9 +25,10 @@ async function getSpeaker(id: string) {
 export default async function SpeakerDetailPage({
   params,
 }: {
-  params: { speakerId: string }
+  params: Promise<{ speakerId: string }>
 }) {
-  const speaker = await getSpeaker(params.speakerId)
+  const { speakerId } = await params
+  const speaker = await getSpeaker(speakerId)
 
   if (!speaker) {
     notFound()
@@ -46,53 +47,86 @@ export default async function SpeakerDetailPage({
     })
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* Back */}
-        <Link
-          href="/speakers"
-          className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
+    <div style={{ minHeight: '100vh' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+        <Link href="/speakers" className="back-link" style={{ marginBottom: '2rem', display: 'inline-flex' }}>
+          <ArrowLeft size={14} />
           Tous les intervenants
         </Link>
 
-        {/* Profile Card */}
-        <div className="bg-white rounded-xl shadow-md p-8 mb-8">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+        <div
+          className="glass animate-slide-up"
+          style={{
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--border-subtle)',
+            padding: '2.5rem 2rem',
+            marginBottom: '2.5rem',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '1.5rem' }}>
             {speaker.photo ? (
               <img
                 src={speaker.photo}
                 alt={speaker.name}
-                className="w-28 h-28 rounded-full object-cover ring-4 ring-blue-100 flex-shrink-0"
+                style={{
+                  width: '112px',
+                  height: '112px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid rgba(99,102,241,0.3)',
+                  boxShadow: '0 0 0 6px rgba(99,102,241,0.1)',
+                }}
               />
             ) : (
-              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-4xl font-bold flex-shrink-0">
+              <div
+                style={{
+                  width: '112px',
+                  height: '112px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '2.25rem',
+                  fontWeight: 800,
+                  color: '#fff',
+                  boxShadow: '0 0 0 6px rgba(99,102,241,0.15), 0 4px 20px rgba(99,102,241,0.3)',
+                }}
+              >
                 {speaker.name.charAt(0).toUpperCase()}
               </div>
             )}
 
-            <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+            <div style={{ flex: 1 }}>
+              <h1
+                style={{
+                  fontSize: '1.75rem',
+                  fontWeight: 850,
+                  color: 'var(--text-primary)',
+                  marginBottom: '0.75rem',
+                  letterSpacing: '-0.02em',
+                }}
+              >
                 {speaker.name}
               </h1>
 
               {speaker.bio && (
-                <p className="text-gray-600 leading-relaxed">{speaker.bio}</p>
+                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, fontSize: '0.9375rem', maxWidth: '600px', margin: '0 auto' }}>
+                  {speaker.bio}
+                </p>
               )}
 
-              {/* External Links */}
               {links && Object.keys(links).length > 0 && (
-                <div className="flex flex-wrap gap-3 mt-4 justify-center sm:justify-start">
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginTop: '1.5rem' }}>
                   {Object.entries(links).map(([label, url]) => (
                     <a
                       key={label}
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-blue-50 hover:text-blue-700 rounded-lg text-sm text-gray-700 transition-colors"
+                      className="ext-link"
                     >
-                      <ExternalLink className="w-3 h-3" />
+                      <ExternalLink size={12} />
                       {label}
                     </a>
                   ))}
@@ -102,38 +136,83 @@ export default async function SpeakerDetailPage({
           </div>
         </div>
 
-        {/* Sessions */}
         <div>
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-blue-600" />
-            Sessions ({speaker.sessions.length})
-          </h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+            <div
+              style={{
+                width: '4px',
+                height: '20px',
+                borderRadius: '99px',
+                background: 'linear-gradient(180deg, var(--accent-from), var(--accent-to))',
+                flexShrink: 0,
+              }}
+            />
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+              Sessions ({speaker.sessions.length})
+            </h2>
+          </div>
 
           {speaker.sessions.length === 0 ? (
-            <p className="text-gray-500 py-8 text-center">
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', textAlign: 'center', padding: '2rem' }}>
               Aucune session assignée pour le moment.
             </p>
           ) : (
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {speaker.sessions.map(({ session }) => (
                 <Link
                   key={session.id}
                   href={`/events/${session.eventId}/sessions/${session.id}`}
-                  className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-5 border border-gray-100 hover:border-blue-200"
+                  className="session-card-link"
                 >
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <h3 className="font-semibold text-gray-800">{session.title}</h3>
+                  <div
+                    style={{
+                      background: 'var(--bg-surface)',
+                      borderRadius: 'var(--radius-md)',
+                      border: '1px solid var(--border-subtle)',
+                      padding: '1.25rem',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      gap: '1rem',
+                    }}
+                  >
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                        <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', color: 'var(--text-primary)' }}>
+                          {session.title}
+                        </h3>
                         <LiveBadge startTime={session.startTime} endTime={session.endTime} />
                       </div>
-                      <div className="text-sm text-gray-500 space-y-1">
-                        <div>📅 {formatDate(session.startTime)}</div>
-                        <div>⏰ {formatTime(session.startTime)} – {formatTime(session.endTime)}</div>
-                        {session.room && <div>📍 {session.room.name}</div>}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                          <Calendar size={12} style={{ color: 'var(--accent-from)' }} />
+                          <span style={{ textTransform: 'capitalize' }}>{formatDate(session.startTime)}</span>
+                        </span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                          <Clock size={12} style={{ color: 'var(--accent-from)' }} />
+                          {formatTime(session.startTime)} – {formatTime(session.endTime)}
+                        </span>
+                        {session.room && (
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                            <MapPin size={12} style={{ color: 'var(--accent-to)' }} />
+                            {session.room.name}
+                          </span>
+                        )}
                       </div>
                     </div>
-                    <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full whitespace-nowrap">
+                    <span
+                      style={{
+                        padding: '0.25rem 0.65rem',
+                        borderRadius: '99px',
+                        background: 'rgba(99,102,241,0.12)',
+                        border: '1px solid rgba(99,102,241,0.25)',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        color: '#a5b4fc',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                      }}
+                    >
                       {session.event.title}
                     </span>
                   </div>

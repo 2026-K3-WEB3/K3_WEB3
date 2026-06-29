@@ -44,14 +44,7 @@ export function Footer() {
             <Link
               key={href}
               href={href}
-              style={{
-                fontSize: '0.875rem',
-                color: 'var(--text-secondary)',
-                textDecoration: 'none',
-                transition: 'color var(--transition-fast)',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
+              className="footer-link"
             >
               {label}
             </Link>

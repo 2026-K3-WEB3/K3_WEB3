@@ -34,51 +34,147 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-500 rounded-2xl mb-4 shadow-lg">
-            <Calendar className="w-8 h-8 text-slate-900" />
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'var(--bg-base)',
+        color: 'var(--text-primary)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem',
+        position: 'relative',
+        overflow: 'hidden',
+        transition: 'background var(--transition-base), color var(--transition-base)',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: '-10%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)',
+          filter: 'blur(50px)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      <div style={{ width: '100%', maxWidth: '400px', position: 'relative' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '60px',
+              height: '60px',
+              background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))',
+              borderRadius: 'var(--radius-lg)',
+              marginBottom: '1rem',
+              boxShadow: '0 4px 20px rgba(99,102,241,0.3)',
+            }}
+          >
+            <Calendar size={28} color="#fff" />
           </div>
-          <h1 className="text-3xl font-bold text-white">EventSync</h1>
-          <p className="text-yellow-500/80 mt-1">Espace Administrateur</p>
+          <h1
+            style={{
+              fontSize: '1.75rem',
+              fontWeight: 900,
+              letterSpacing: '-0.025em',
+              background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to), #a5b4fc)',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            EventSync
+          </h1>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, marginTop: '0.25rem' }}>
+            Espace Administrateur
+          </p>
         </div>
 
-        {/* Card */}
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-2xl">
-          <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-            <Lock className="w-5 h-5 text-yellow-500" />
+        <div
+          style={{
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '2rem',
+            boxShadow: 'var(--shadow-lg)',
+          }}
+        >
+          <h2
+            style={{
+              fontSize: '1.1rem',
+              fontWeight: 700,
+              color: 'var(--text-primary)',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+            }}
+          >
+            <Lock size={16} style={{ color: 'var(--accent-from)' }} />
             Connexion
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                 Email
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-yellow-500" />
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Mail
+                  size={16}
+                  style={{
+                    position: 'absolute',
+                    left: '12px',
+                    color: 'var(--accent-from)',
+                    pointerEvents: 'none',
+                  }}
+                />
                 <input
                   id="admin-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="sangy@event-sync.mg"
-                  className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all"
+                  placeholder="name@event-sync.com"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem 0.75rem 2.5rem',
+                    background: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-mid)',
+                    borderRadius: 'var(--radius-md)',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.875rem',
+                    outline: 'none',
+                    transition: 'border-color var(--transition-fast)',
+                  }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--accent-from)' }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border-mid)' }}
                 />
               </div>
             </div>
 
-            {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                 Mot de passe
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-yellow-500" />
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Lock
+                  size={16}
+                  style={{
+                    position: 'absolute',
+                    left: '12px',
+                    color: 'var(--accent-from)',
+                    pointerEvents: 'none',
+                  }}
+                />
                 <input
                   id="admin-password"
                   type={showPassword ? 'text' : 'password'}
@@ -86,45 +182,79 @@ export default function AdminLoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 2.5rem 0.75rem 2.5rem',
+                    background: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-mid)',
+                    borderRadius: 'var(--radius-md)',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.875rem',
+                    outline: 'none',
+                    transition: 'border-color var(--transition-fast)',
+                  }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--accent-from)' }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border-mid)' }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-yellow-500 hover:text-yellow-400 transition-colors"
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'var(--text-muted)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 0,
+                    transition: 'color var(--transition-fast)',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
-            {/* Error */}
             {error && (
-              <div className="bg-red-500/20 border border-red-500/40 rounded-lg px-4 py-3 text-red-300 text-sm">
+              <div
+                style={{
+                  background: 'rgba(239,68,68,0.1)',
+                  border: '1px solid rgba(239,68,68,0.25)',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '0.75rem 1rem',
+                  color: '#f87171',
+                  fontSize: '0.8125rem',
+                }}
+              >
                 {error}
               </div>
             )}
 
-            {/* Submit */}
             <button
               id="admin-login-submit"
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-yellow-500 hover:bg-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-900 font-bold rounded-xl transition-all duration-200 shadow-lg flex items-center justify-center gap-2"
+              className="btn-primary"
+              style={{
+                width: '100%',
+                padding: '0.75rem 1.25rem',
+                fontSize: '0.875rem',
+                justifyContent: 'center',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+              }}
             >
-              {loading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
-                  Connexion...
-                </>
-              ) : (
-                'Se connecter'
-              )}
+              {loading ? 'Connexion...' : 'Se connecter'}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-slate-400/60 text-sm mt-6">
+        <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '1.5rem' }}>
           Accès réservé aux organisateurs EventSync
         </p>
       </div>

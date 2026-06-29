@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
-import { Calendar, Users, MapPin, MessageSquare, Plus, Activity, TrendingUp } from 'lucide-react'
+import { Calendar, Users, MapPin, Activity, MessageSquare, Plus, TrendingUp } from 'lucide-react'
 
 async function getStats() {
   const [events, sessions, speakers, rooms, questions] = await Promise.all([
@@ -29,87 +29,127 @@ export default async function AdminDashboardPage() {
   const stats = await getStats()
 
   const statCards = [
-    { label: 'Événements', value: stats.events, icon: Calendar, color: 'bg-blue-500', href: '/admin/events' },
-    { label: 'Sessions', value: stats.sessions, icon: Activity, color: 'bg-indigo-500', href: '/admin/sessions' },
-    { label: 'Intervenants', value: stats.speakers, icon: Users, color: 'bg-purple-500', href: '/admin/speakers' },
-    { label: 'Salles', value: stats.rooms, icon: MapPin, color: 'bg-emerald-500', href: '/admin/rooms' },
-    { label: 'Questions', value: stats.questions, icon: MessageSquare, color: 'bg-orange-500', href: '#' },
-    { label: 'Sessions Live', value: stats.liveSessions, icon: TrendingUp, color: 'bg-red-500', href: '/admin/sessions' },
+    { label: 'Événements', value: stats.events, icon: Calendar, color: '#3b82f6', href: '/admin/events' },
+    { label: 'Sessions', value: stats.sessions, icon: Activity, color: '#6366f1', href: '/admin/sessions' },
+    { label: 'Intervenants', value: stats.speakers, icon: Users, color: '#8b5cf6', href: '/admin/speakers' },
+    { label: 'Salles', value: stats.rooms, icon: MapPin, color: '#10b981', href: '/admin/rooms' },
+    { label: 'Questions', value: stats.questions, icon: MessageSquare, color: '#f59e0b', href: '#' },
+    { label: 'Sessions Live', value: stats.liveSessions, icon: TrendingUp, color: '#ef4444', href: '/admin/sessions' },
   ]
 
   return (
-    <div className="p-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Tableau de bord</h1>
-        <p className="text-gray-500 mt-1">Vue d&apos;ensemble de la plateforme EventSync</p>
+    <div style={{ padding: '2.5rem 2rem' }}>
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>Tableau de bord</h1>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+          Vue d&apos;ensemble de la plateforme EventSync
+        </p>
       </div>
 
-      {/* Stats grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: '1.25rem',
+          marginBottom: '2.5rem',
+        }}
+      >
         {statCards.map(({ label, value, icon: Icon, color, href }) => (
-          <Link
-            key={label}
-            href={href}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition-all hover:-translate-y-0.5"
-          >
-            <div className={`${color} w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm`}>
-              <Icon className="w-6 h-6 text-white" />
+          <Link key={label} href={href} className="stat-card animate-slide-up">
+            <div
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: 'var(--radius-md)',
+                background: `${color}15`,
+                border: `1.5px solid ${color}30`,
+                color: color,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
+              <Icon size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-800">{value}</p>
-              <p className="text-sm text-gray-500">{label}</p>
+              <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>{value}</p>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{label}</p>
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Quick actions */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Actions rapides</h2>
-        <div className="flex flex-wrap gap-3">
+      <div
+        style={{
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.25rem' }}>
+          Actions rapides
+        </h2>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
           {[
-            { href: '/admin/events/new', label: 'Nouvel événement', color: 'bg-blue-600 hover:bg-blue-700' },
-            { href: '/admin/sessions/new', label: 'Nouvelle session', color: 'bg-indigo-600 hover:bg-indigo-700' },
-            { href: '/admin/speakers/new', label: 'Nouvel intervenant', color: 'bg-purple-600 hover:bg-purple-700' },
-            { href: '/admin/rooms/new', label: 'Nouvelle salle', color: 'bg-emerald-600 hover:bg-emerald-700' },
-          ].map(({ href, label, color }) => (
+            { href: '/admin/events/new', label: 'Nouvel événement', bg: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))' },
+            { href: '/admin/sessions/new', label: 'Nouvelle session', bg: 'linear-gradient(135deg, #6366f1, #4f46e5)' },
+            { href: '/admin/speakers/new', label: 'Nouvel intervenant', bg: 'linear-gradient(135deg, #8b5cf6, #7c3aed)' },
+            { href: '/admin/rooms/new', label: 'Nouvelle salle', bg: 'linear-gradient(135deg, #10b981, #059669)' },
+          ].map(({ href, label, bg }) => (
             <Link
               key={href}
               href={href}
-              className={`${color} text-white px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 transition-colors`}
+              className="quick-action"
+              style={{ background: bg }}
             >
-              <Plus className="w-4 h-4" />
+              <Plus size={16} />
               {label}
             </Link>
           ))}
         </div>
       </div>
 
-      {/* Recent events */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">Événements récents</h2>
-          <Link href="/admin/events" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-            Voir tout →
-          </Link>
+      <div
+        style={{
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '1.5rem',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Événements récents</h2>
+          <Link href="/admin/events" className="admin-recent-edit">Voir tout →</Link>
         </div>
-        <div className="space-y-3">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {stats.recentEvents.length === 0 ? (
-            <p className="text-gray-400 text-sm text-center py-8">Aucun événement créé</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', textAlign: 'center', padding: '2rem' }}>
+              Aucun événement créé
+            </p>
           ) : (
             stats.recentEvents.map((event) => (
-              <div key={event.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+              <div
+                key={event.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '1rem 1.25rem',
+                  background: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: 'var(--radius-md)',
+                }}
+              >
                 <div>
-                  <p className="font-medium text-gray-800 text-sm">{event.title}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    {event.sessions.length} session{event.sessions.length !== 1 ? 's' : ''} · {event.location}
+                  <p style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{event.title}</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                    {event.sessions.length} session{event.sessions.length !== 1 ? 's' : ''} · {event.location || 'Lieu non spécifié'}
                   </p>
                 </div>
-                <Link
-                  href={`/admin/events/${event.id}/edit`}
-                  className="text-xs text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg font-medium"
-                >
+                <Link href={`/admin/events/${event.id}/edit`} className="admin-recent-edit">
                   Modifier
                 </Link>
               </div>

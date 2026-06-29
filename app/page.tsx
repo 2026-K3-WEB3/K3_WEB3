@@ -126,49 +126,13 @@ export default async function HomePage() {
               animationDelay: '160ms',
             }}
           >
-            <Link
-              href="/events"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.75rem',
-                borderRadius: 'var(--radius-md)',
-                background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: '0.9375rem',
-                textDecoration: 'none',
-                boxShadow: '0 4px 20px rgba(99,102,241,0.45)',
-                transition: 'all var(--transition-base)',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(99,102,241,0.6)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(99,102,241,0.45)' }}
-            >
+            <Link href="/events" className="btn-primary">
               <Calendar size={16} />
               Voir les événements
               <ArrowRight size={15} />
             </Link>
 
-            <Link
-              href="/speakers"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.75rem',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--bg-elevated)',
-                color: 'var(--text-primary)',
-                fontWeight: 600,
-                fontSize: '0.9375rem',
-                textDecoration: 'none',
-                border: '1px solid var(--border-mid)',
-                transition: 'all var(--transition-base)',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(99,102,241,0.5)'; e.currentTarget.style.color = '#a5b4fc' }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-mid)'; e.currentTarget.style.color = 'var(--text-primary)' }}
-            >
+            <Link href="/speakers" className="btn-secondary">
               Intervenants
             </Link>
           </div>

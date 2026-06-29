@@ -2,12 +2,30 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Calendar, Home, Users, Star } from 'lucide-react'
-import { useState } from 'react'
+import { Calendar, Home, Users, Star, Sun, Moon } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 export function Navbar() {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null
+    if (savedTheme) {
+      setTheme(savedTheme)
+      document.documentElement.className = savedTheme
+    } else {
+      document.documentElement.className = 'dark'
+    }
+  }, [])
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(nextTheme)
+    document.documentElement.className = nextTheme
+    localStorage.setItem('theme', nextTheme)
+  }
 
   const navLinks = [
     { href: '/', label: 'Accueil', icon: Home },
@@ -19,10 +37,11 @@ export function Navbar() {
     position: 'sticky',
     top: 0,
     zIndex: 50,
-    background: 'rgba(15,15,26,0.7)',
+    background: 'var(--navbar-bg)',
     backdropFilter: 'blur(24px)',
     WebkitBackdropFilter: 'blur(24px)',
     borderBottom: '1px solid var(--border-subtle)',
+    transition: 'background var(--transition-base)',
   }
 
   const containerStyle: React.CSSProperties = {
@@ -99,6 +118,33 @@ export function Navbar() {
         </nav>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <button
+            onClick={toggleTheme}
+            style={{
+              background: 'transparent',
+              border: '1.5px solid var(--border-mid)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '0.45rem',
+              cursor: 'pointer',
+              color: 'var(--text-secondary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all var(--transition-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--accent-from)'
+              e.currentTarget.style.color = 'var(--text-primary)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-mid)'
+              e.currentTarget.style.color = 'var(--text-secondary)'
+            }}
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+
           <Link href="/admin" style={adminBtnStyle} className="hidden md:inline-flex">
             Admin
           </Link>
@@ -141,7 +187,9 @@ export function Navbar() {
         <div
           className="flex md:hidden flex-col animate-slide-up"
           style={{
-            background: 'rgba(15,15,26,0.95)',
+            background: 'var(--navbar-bg)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
             borderTop: '1px solid var(--border-subtle)',
             padding: '0.75rem 1.5rem 1rem',
             gap: '0.25rem',

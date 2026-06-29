@@ -110,7 +110,7 @@ export function Navbar() {
 
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }} className="hidden md:flex">
           {navLinks.map(({ href, label, icon: Icon }) => (
-            <Link key={href} href={href} style={getLinkStyle(href)}>
+            <Link key={href} href={href} style={getLinkStyle(href)} className="hover:-translate-y-1 hover:shadow-sm">
               <Icon size={15} />
               {label}
             </Link>
@@ -145,7 +145,7 @@ export function Navbar() {
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
-          <Link href="/admin" style={adminBtnStyle} className="hidden md:inline-flex">
+          <Link href="/admin" style={adminBtnStyle} className="hidden md:inline-flex hover:-translate-y-1 hover:shadow-md">
             Admin
           </Link>
 
@@ -204,6 +204,7 @@ export function Navbar() {
                 ...getLinkStyle(href),
                 padding: '0.7rem 0.9rem',
               }}
+              className="hover:-translate-y-1 hover:shadow-sm"
             >
               <Icon size={16} />
               {label}

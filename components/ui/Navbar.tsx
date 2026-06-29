@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
 
 export function Navbar() {
   const pathname = usePathname()
-  const [mobileOpen, setMobileOpen] = useState(false)
+
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
   useEffect(() => {
@@ -108,7 +108,7 @@ export function Navbar() {
           <span>EventSync</span>
         </Link>
 
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }} className="hidden md:flex">
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
           {navLinks.map(({ href, label, icon: Icon }) => (
             <Link key={href} href={href} style={getLinkStyle(href)} className="hover:-translate-y-1 hover:shadow-sm">
               <Icon size={15} />
@@ -145,80 +145,11 @@ export function Navbar() {
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
-          <Link href="/admin" style={adminBtnStyle} className="hidden md:inline-flex hover:-translate-y-1 hover:shadow-md">
+          <Link href="/admin" style={adminBtnStyle} className="inline-flex hover:-translate-y-1 hover:shadow-md">
             Admin
           </Link>
-
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex md:hidden"
-            style={{
-              background: 'var(--bg-elevated)',
-              border: '1px solid var(--border-mid)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '0.45rem',
-              cursor: 'pointer',
-              color: 'var(--text-secondary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            aria-label="Menu"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              {mobileOpen ? (
-                <>
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </>
-              ) : (
-                <>
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </>
-              )}
-            </svg>
-          </button>
         </div>
       </div>
-
-      {mobileOpen && (
-        <div
-          className="flex md:hidden flex-col animate-slide-up"
-          style={{
-            background: 'var(--navbar-bg)',
-            backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
-            borderTop: '1px solid var(--border-subtle)',
-            padding: '0.75rem 1.5rem 1rem',
-            gap: '0.25rem',
-          }}
-        >
-          {navLinks.map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setMobileOpen(false)}
-              style={{
-                ...getLinkStyle(href),
-                padding: '0.7rem 0.9rem',
-              }}
-              className="hover:-translate-y-1 hover:shadow-sm"
-            >
-              <Icon size={16} />
-              {label}
-            </Link>
-          ))}
-          <Link
-            href="/admin"
-            onClick={() => setMobileOpen(false)}
-            style={{ ...adminBtnStyle, marginTop: '0.5rem', justifyContent: 'center' }}
-          >
-            Admin
-          </Link>
-        </div>
-      )}
     </header>
   )
 }

@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
-import { Plus, Pencil, Trash2, Calendar, MapPin } from 'lucide-react'
+import { Plus, Pencil, Calendar, MapPin } from 'lucide-react'
 import { DeleteButton } from '@/components/admin/DeleteButton'
 
 export default async function AdminEventsPage() {
@@ -13,92 +13,114 @@ export default async function AdminEventsPage() {
     new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div style={{ padding: '2.5rem 2rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1.5rem', marginBottom: '2.5rem' }}>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Événements</h1>
-          <p className="text-gray-500 mt-1">{events.length} événement{events.length !== 1 ? 's' : ''} au total</p>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>Événements</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+            {events.length} événement{events.length !== 1 ? 's' : ''} au total
+          </p>
         </div>
-        <Link
-          href="/admin/events/new"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors shadow-sm"
-        >
-          <Plus className="w-4 h-4" />
+        <Link href="/admin/events/new" className="btn-primary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.875rem' }}>
+          <Plus size={16} />
           Nouvel événement
         </Link>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div
+        style={{
+          background: 'var(--bg-surface)',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--border-subtle)',
+          overflow: 'hidden',
+          boxShadow: 'var(--shadow-md)',
+        }}
+      >
         {events.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
-            <Calendar className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p className="text-lg font-medium">Aucun événement</p>
-            <Link href="/admin/events/new" className="mt-4 inline-block text-blue-600 hover:underline text-sm">
+          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
+            <Calendar size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
+            <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Aucun événement créé</p>
+            <Link href="/admin/events/new" className="link-accent" style={{ marginTop: '0.75rem', display: 'inline-block', fontSize: '0.875rem' }}>
               Créer le premier événement →
             </Link>
           </div>
         ) : (
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
-              <tr>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Événement</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Dates</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Lieu</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Sessions</th>
-                <th className="text-right px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {events.map((event) => (
-                <tr key={event.id} className="hover:bg-gray-50/60 transition-colors">
-                  <td className="px-6 py-4">
-                    <p className="font-semibold text-gray-800">{event.title}</p>
-                    <p className="text-sm text-gray-400 mt-0.5 line-clamp-1">{event.description}</p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                      <Calendar className="w-3.5 h-3.5 text-gray-400" />
-                      {formatDate(event.startDate)}
-                    </div>
-                    <p className="text-xs text-gray-400 mt-0.5 ml-5">→ {formatDate(event.endDate)}</p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                      <MapPin className="w-3.5 h-3.5 text-gray-400" />
-                      {event.location}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-medium">
-                      {event.sessions.length} session{event.sessions.length !== 1 ? 's' : ''}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-2">
-                      <Link
-                        href={`/events/${event.id}`}
-                        target="_blank"
-                        className="text-xs text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-                      >
-                        Voir
-                      </Link>
-                      <Link
-                        href={`/admin/events/${event.id}/edit`}
-                        className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors font-medium"
-                      >
-                        <Pencil className="w-3.5 h-3.5" />
-                        Modifier
-                      </Link>
-                      <DeleteButton id={event.id} title={event.title} endpoint="/api/events" />
-                    </div>
-                  </td>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border-subtle)' }}>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Événement</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Dates</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Lieu</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Sessions</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', textAlign: 'right' }}>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {events.map((event) => (
+                  <tr key={event.id} style={{ borderBottom: '1px solid var(--border-subtle)', transition: 'background var(--transition-fast)' }} className="table-row-hover">
+                    <td style={{ padding: '1.25rem 1.5rem' }}>
+                      <p style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>{event.title}</p>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.25rem', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{event.description}</p>
+                    </td>
+                    <td style={{ padding: '1.25rem 1.5rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                        <Calendar size={14} style={{ color: 'var(--accent-from)', flexShrink: 0 }} />
+                        {formatDate(event.startDate)}
+                      </div>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem', marginLeft: '1.25rem' }}>→ {formatDate(event.endDate)}</p>
+                    </td>
+                    <td style={{ padding: '1.25rem 1.5rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                        <MapPin size={14} style={{ color: 'var(--accent-to)', flexShrink: 0 }} />
+                        {event.location}
+                      </div>
+                    </td>
+                    <td style={{ padding: '1.25rem 1.5rem' }}>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: '0.25rem 0.65rem',
+                          borderRadius: '99px',
+                          background: 'rgba(99,102,241,0.12)',
+                          border: '1px solid rgba(99,102,241,0.25)',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          color: '#a5b4fc',
+                        }}
+                      >
+                        {event.sessions.length} session{event.sessions.length !== 1 ? 's' : ''}
+                      </span>
+                    </td>
+                    <td style={{ padding: '1.25rem 1.5rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                        <Link
+                          href={`/events/${event.id}`}
+                          target="_blank"
+                          className="ext-link"
+                          style={{ padding: '0.35rem 0.75rem' }}
+                        >
+                          Voir
+                        </Link>
+                        <Link
+                          href={`/admin/events/${event.id}/edit`}
+                          className="event-detail-link"
+                          style={{ padding: '0.35rem 0.75rem' }}
+                        >
+                          <Pencil size={12} />
+                          Modifier
+                        </Link>
+                        <DeleteButton id={event.id} title={event.title} endpoint="/api/events" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
   )
 }
-

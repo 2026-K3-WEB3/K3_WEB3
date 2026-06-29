@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
-import { Plus, Pencil, Trash2, MapPin } from 'lucide-react'
+import { Plus, Pencil, MapPin } from 'lucide-react'
 import { DeleteButton } from '@/components/admin/DeleteButton'
 
 export default async function AdminRoomsPage() {
@@ -10,48 +10,102 @@ export default async function AdminRoomsPage() {
   })
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div style={{ padding: '2.5rem 2rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1.5rem', marginBottom: '2.5rem' }}>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Salles</h1>
-          <p className="text-gray-500 mt-1">{rooms.length} salle{rooms.length !== 1 ? 's' : ''} disponible{rooms.length !== 1 ? 's' : ''}</p>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>Salles</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+            {rooms.length} salle{rooms.length !== 1 ? 's' : ''} disponible{rooms.length !== 1 ? 's' : ''}
+          </p>
         </div>
-        <Link
-          href="/admin/rooms/new"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition-colors shadow-sm"
-        >
-          <Plus className="w-4 h-4" />
+        <Link href="/admin/rooms/new" className="btn-primary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.875rem' }}>
+          <Plus size={16} />
           Nouvelle salle
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
         {rooms.length === 0 ? (
-          <div className="col-span-full text-center py-20 text-gray-400 bg-white rounded-2xl border border-gray-100">
-            <MapPin className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p className="text-lg font-medium">Aucune salle</p>
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)', background: 'var(--bg-surface)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-subtle)' }}>
+            <MapPin size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
+            <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Aucune salle créée</p>
           </div>
         ) : (
           rooms.map((room) => (
-            <div key={room.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all">
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-emerald-600" />
+            <div
+              key={room.id}
+              style={{
+                background: 'var(--bg-surface)',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--border-subtle)',
+                padding: '1.5rem',
+                boxShadow: 'var(--shadow-sm)',
+                transition: 'transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base)',
+              }}
+              className="card-hover"
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'rgba(16,185,129,0.12)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#10b981',
+                  }}
+                >
+                  <MapPin size={20} />
                 </div>
-                <span className="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-lg font-medium">
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: '0.25rem 0.65rem',
+                    borderRadius: '99px',
+                    background: 'rgba(16,185,129,0.12)',
+                    border: '1px solid rgba(16,185,129,0.25)',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    color: '#a7f3d0',
+                  }}
+                >
                   {room.sessions.length} session{room.sessions.length !== 1 ? 's' : ''}
                 </span>
               </div>
-              <h3 className="font-semibold text-gray-800 text-lg mb-4">{room.name}</h3>
-              <div className="flex items-center gap-2">
+
+              <h3 style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>
+                {room.name}
+              </h3>
+
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <Link
                   href={`/admin/rooms/${room.id}/edit`}
-                  className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs text-emerald-600 hover:text-emerald-700 px-3 py-2 rounded-lg hover:bg-emerald-50 transition-colors font-medium border border-emerald-200"
+                  style={{
+                    flex: 1,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.35rem',
+                    padding: '0.45rem',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'rgba(16,185,129,0.12)',
+                    border: '1px solid rgba(16,185,129,0.3)',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: '#a7f3d0',
+                    textDecoration: 'none',
+                    transition: 'background var(--transition-fast)',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(16,185,129,0.22)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(16,185,129,0.12)' }}
                 >
-                  <Pencil className="w-3.5 h-3.5" />
+                  <Pencil size={12} />
                   Modifier
                 </Link>
-                  <DeleteButton id={room.id} title={room.name} endpoint="/api/rooms" />
+                <DeleteButton id={room.id} title={room.name} endpoint="/api/rooms" />
               </div>
             </div>
           ))

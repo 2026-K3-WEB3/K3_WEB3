@@ -343,3 +343,7 @@ body {
 
 .session-detail-link { flex: 1; text-decoration: none; transition: color var(--transition-fast); }
 .session-detail-link:hover h3 { color: #a5b4fc; }
+
+.table-row-hover:hover {
+  background: var(--bg-overlay) !important;
+}

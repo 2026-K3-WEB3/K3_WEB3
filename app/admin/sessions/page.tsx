@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
-import { Plus, Pencil, Trash2, Activity, Clock } from 'lucide-react'
+import { Plus, Pencil, Activity, Clock } from 'lucide-react'
 import { DeleteButton } from '@/components/admin/DeleteButton'
 
 export default async function AdminSessionsPage() {
@@ -21,89 +21,124 @@ export default async function AdminSessionsPage() {
     new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div style={{ padding: '2.5rem 2rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1.5rem', marginBottom: '2.5rem' }}>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Sessions</h1>
-          <p className="text-gray-500 mt-1">{sessions.length} session{sessions.length !== 1 ? 's' : ''} au total</p>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>Sessions</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+            {sessions.length} session{sessions.length !== 1 ? 's' : ''} au total
+          </p>
         </div>
-        <Link
-          href="/admin/sessions/new"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-colors shadow-sm"
-        >
-          <Plus className="w-4 h-4" />
+        <Link href="/admin/sessions/new" className="btn-primary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.875rem' }}>
+          <Plus size={16} />
           Nouvelle session
         </Link>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div
+        style={{
+          background: 'var(--bg-surface)',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--border-subtle)',
+          overflow: 'hidden',
+          boxShadow: 'var(--shadow-md)',
+        }}
+      >
         {sessions.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
-            <Activity className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p className="text-lg font-medium">Aucune session</p>
+          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
+            <Activity size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
+            <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Aucune session créée</p>
           </div>
         ) : (
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
-              <tr>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Session</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Horaire</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Salle</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Intervenants</th>
-                <th className="text-right px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {sessions.map((session) => {
-                const isLive = now >= session.startTime && now <= session.endTime
-                return (
-                  <tr key={session.id} className="hover:bg-gray-50/60 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <p className="font-semibold text-gray-800">{session.title}</p>
-                        {isLive && (
-                          <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium animate-pulse">
-                            LIVE
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-gray-400 mt-0.5">{session.event.title}</p>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                        <Clock className="w-3.5 h-3.5 text-gray-400" />
-                        {formatDate(session.startTime)} · {formatTime(session.startTime)}–{formatTime(session.endTime)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm text-gray-600">{session.room?.name ?? '—'}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-wrap gap-1">
-                        {session.speakers.map(({ speaker }) => (
-                          <span key={speaker.id} className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-lg">
-                            {speaker.name}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/admin/sessions/${session.id}/edit`}
-                          className="inline-flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-700 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium"
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                          Modifier
-                        </Link>
-                        <DeleteButton id={session.id} title={session.title} endpoint="/api/sessions" />
-                      </div>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border-subtle)' }}>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Session</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Horaire</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Salle</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Intervenants</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', textAlign: 'right' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sessions.map((session) => {
+                  const isLive = now >= session.startTime && now <= session.endTime
+                  return (
+                    <tr key={session.id} style={{ borderBottom: '1px solid var(--border-subtle)', transition: 'background var(--transition-fast)' }} className="table-row-hover">
+                      <td style={{ padding: '1.25rem 1.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                          <p style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>{session.title}</p>
+                          {isLive && (
+                            <span
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                padding: '0.15rem 0.5rem',
+                                borderRadius: '99px',
+                                background: 'rgba(239,68,68,0.12)',
+                                border: '1px solid rgba(239,68,68,0.25)',
+                                fontSize: '0.65rem',
+                                fontWeight: 700,
+                                color: '#f87171',
+                              }}
+                              className="animate-pulse"
+                            >
+                              LIVE
+                            </span>
+                          )}
+                        </div>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>{session.event.title}</p>
+                      </td>
+                      <td style={{ padding: '1.25rem 1.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                          <Clock size={14} style={{ color: 'var(--accent-from)', flexShrink: 0 }} />
+                          {formatDate(session.startTime)} · {formatTime(session.startTime)}–{formatTime(session.endTime)}
+                        </div>
+                      </td>
+                      <td style={{ padding: '1.25rem 1.5rem' }}>
+                        <span style={{ fontSize: '0.875rem', color: 'var(--text-primary)' }}>{session.room?.name ?? '—'}</span>
+                      </td>
+                      <td style={{ padding: '1.25rem 1.5rem' }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                          {session.speakers.map(({ speaker }) => (
+                            <span
+                              key={speaker.id}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                padding: '0.15rem 0.5rem',
+                                borderRadius: 'var(--radius-sm)',
+                                background: 'rgba(99,102,241,0.08)',
+                                border: '1px solid rgba(99,102,241,0.2)',
+                                fontSize: '0.75rem',
+                                color: '#a5b4fc',
+                              }}
+                            >
+                              {speaker.name}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td style={{ padding: '1.25rem 1.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                          <Link
+                            href={`/admin/sessions/${session.id}/edit`}
+                            className="event-detail-link"
+                            style={{ padding: '0.35rem 0.75rem' }}
+                          >
+                            <Pencil size={12} />
+                            Modifier
+                          </Link>
+                          <DeleteButton id={session.id} title={session.title} endpoint="/api/sessions" />
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

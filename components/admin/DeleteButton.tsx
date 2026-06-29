@@ -4,18 +4,40 @@ import { Trash2 } from 'lucide-react'
 
 export function DeleteButton({ id, title, endpoint }: { id: string; title: string; endpoint: string }) {
   return (
-    <a
-      href="#"
+    <button
       onClick={(e) => {
         e.preventDefault()
         if (confirm(`Supprimer "${title}" ?`)) {
           fetch(`${endpoint}/${id}`, { method: 'DELETE' }).then(() => location.reload())
         }
       }}
-      className="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors font-medium cursor-pointer"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '0.4rem',
+        padding: '0.4rem 0.85rem',
+        borderRadius: 'var(--radius-sm)',
+        border: '1px solid var(--border-subtle)',
+        background: 'transparent',
+        fontSize: '0.8rem',
+        fontWeight: 600,
+        color: 'var(--text-muted)',
+        cursor: 'pointer',
+        transition: 'all var(--transition-fast)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.35)'
+        e.currentTarget.style.color = '#f87171'
+        e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'var(--border-subtle)'
+        e.currentTarget.style.color = 'var(--text-muted)'
+        e.currentTarget.style.background = 'transparent'
+      }}
     >
-      <Trash2 className="w-3.5 h-3.5" />
+      <Trash2 size={12} />
       Supprimer
-    </a>
+    </button>
   )
 }

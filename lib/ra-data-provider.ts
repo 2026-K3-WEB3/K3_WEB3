@@ -2,14 +2,6 @@ import type { DataProvider } from 'react-admin'
 
 const API_URL = '/api'
 
-const getHeaders = () => {
-  const token = localStorage.getItem('ra-token')
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  }
-}
-
 const resourceMap: Record<string, string> = {
   events: 'events',
   sessions: 'sessions',
@@ -17,10 +9,29 @@ const resourceMap: Record<string, string> = {
   rooms: 'rooms',
 }
 
+const cleanData = (resource: string, data: Record<string, any>) => {
+  const cleaned = { ...data }
+  delete cleaned.id
+  delete cleaned.createdAt
+  delete cleaned.sessions
+  delete cleaned.speakers
+  delete cleaned.questions
+  delete cleaned.event
+  delete cleaned.room
+
+  if (resource === 'sessions') {
+    if (cleaned.capacity) {
+      cleaned.capacity = Number(cleaned.capacity)
+    }
+  }
+
+  return cleaned
+}
+
 export const dataProvider: DataProvider = {
   getList: async (resource, params) => {
     const endpoint = resourceMap[resource]
-    const res = await fetch(`${API_URL}/${endpoint}`, { headers: getHeaders() })
+    const res = await fetch(`${API_URL}/${endpoint}`)
     if (!res.ok) throw new Error(`Failed to fetch ${resource}`)
     const raw = await res.json()
     const data = Array.isArray(raw) ? raw : raw.data ?? []
@@ -44,7 +55,7 @@ export const dataProvider: DataProvider = {
 
   getOne: async (resource, params) => {
     const endpoint = resourceMap[resource]
-    const res = await fetch(`${API_URL}/${endpoint}/${params.id}`, { headers: getHeaders() })
+    const res = await fetch(`${API_URL}/${endpoint}/${params.id}`)
     if (!res.ok) throw new Error(`Failed to fetch ${resource}/${params.id}`)
     const data = await res.json()
     return { data }
@@ -54,7 +65,7 @@ export const dataProvider: DataProvider = {
     const endpoint = resourceMap[resource]
     const results = await Promise.all(
       params.ids.map((id) =>
-        fetch(`${API_URL}/${endpoint}/${id}`, { headers: getHeaders() }).then((r) => r.json())
+        fetch(`${API_URL}/${endpoint}/${id}`).then((r) => r.json())
       )
     )
     return { data: results }
@@ -62,7 +73,7 @@ export const dataProvider: DataProvider = {
 
   getManyReference: async (resource, params) => {
     const endpoint = resourceMap[resource]
-    const res = await fetch(`${API_URL}/${endpoint}`, { headers: getHeaders() })
+    const res = await fetch(`${API_URL}/${endpoint}`)
     if (!res.ok) throw new Error(`Failed to fetch ${resource}`)
     const raw = await res.json()
     const data = Array.isArray(raw) ? raw : raw.data ?? []
@@ -72,10 +83,13 @@ export const dataProvider: DataProvider = {
 
   create: async (resource, params) => {
     const endpoint = resourceMap[resource]
+    const payload = cleanData(resource, params.data)
     const res = await fetch(`${API_URL}/${endpoint}`, {
       method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify(params.data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
     })
     if (!res.ok) throw new Error(`Failed to create ${resource}`)
     const data = await res.json()
@@ -84,10 +98,13 @@ export const dataProvider: DataProvider = {
 
   update: async (resource, params) => {
     const endpoint = resourceMap[resource]
+    const payload = cleanData(resource, params.data)
     const res = await fetch(`${API_URL}/${endpoint}/${params.id}`, {
       method: 'PUT',
-      headers: getHeaders(),
-      body: JSON.stringify(params.data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
     })
     if (!res.ok) throw new Error(`Failed to update ${resource}/${params.id}`)
     const data = await res.json()
@@ -96,12 +113,15 @@ export const dataProvider: DataProvider = {
 
   updateMany: async (resource, params) => {
     const endpoint = resourceMap[resource]
+    const payload = cleanData(resource, params.data)
     await Promise.all(
       params.ids.map((id) =>
         fetch(`${API_URL}/${endpoint}/${id}`, {
           method: 'PUT',
-          headers: getHeaders(),
-          body: JSON.stringify(params.data),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
         })
       )
     )
@@ -112,7 +132,6 @@ export const dataProvider: DataProvider = {
     const endpoint = resourceMap[resource]
     const res = await fetch(`${API_URL}/${endpoint}/${params.id}`, {
       method: 'DELETE',
-      headers: getHeaders(),
     })
     if (!res.ok) throw new Error(`Failed to delete ${resource}/${params.id}`)
     return { data: { id: params.id } as { id: string } }
@@ -124,7 +143,6 @@ export const dataProvider: DataProvider = {
       params.ids.map((id) =>
         fetch(`${API_URL}/${endpoint}/${id}`, {
           method: 'DELETE',
-          headers: getHeaders(),
         })
       )
     )

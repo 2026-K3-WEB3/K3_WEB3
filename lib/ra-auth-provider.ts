@@ -1,50 +1,83 @@
 import type { AuthProvider } from 'react-admin'
 
-const API_URL = '/api'
-
 export const authProvider: AuthProvider = {
   login: async ({ username, password }) => {
-    const res = await fetch(`${API_URL}/auth/admin-login`, {
+    const csrfRes = await fetch('/api/auth/csrf')
+    const { csrfToken } = await csrfRes.json()
+
+    const res = await fetch('/api/auth/callback/credentials', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: username, password }),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        username,
+        password,
+        csrfToken,
+        json: 'true',
+        callbackUrl: '/ra-admin',
+        redirect: 'false',
+      }),
     })
+
     if (!res.ok) {
-      throw new Error('Email ou mot de passe incorrect')
+      throw new Error('Identifiants incorrects')
     }
-    const { token, user } = await res.json()
-    localStorage.setItem('ra-token', token)
-    localStorage.setItem('ra-user', JSON.stringify(user))
+
+    const data = await res.json()
+    if (data.url && data.url.includes('error=')) {
+      throw new Error('Identifiants incorrects')
+    }
   },
 
   logout: async () => {
-    localStorage.removeItem('ra-token')
-    localStorage.removeItem('ra-user')
+    const csrfRes = await fetch('/api/auth/csrf')
+    const { csrfToken } = await csrfRes.json()
+
+    await fetch('/api/auth/signout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        csrfToken,
+        json: 'true',
+        callbackUrl: '/',
+        redirect: 'false',
+      }),
+    })
   },
 
   checkAuth: async () => {
-    const token = localStorage.getItem('ra-token')
-    if (!token) throw new Error('Not authenticated')
+    const res = await fetch('/api/auth/session')
+    if (!res.ok) throw new Error('Not authenticated')
+    const session = await res.json()
+    if (!session || !session.user) {
+      throw new Error('Not authenticated')
+    }
   },
 
   checkError: async (error) => {
     if (error?.status === 401 || error?.status === 403) {
-      localStorage.removeItem('ra-token')
-      localStorage.removeItem('ra-user')
-      throw new Error('Session expired')
+      throw new Error('Session expirée')
     }
   },
 
   getPermissions: async () => {
-    const user = localStorage.getItem('ra-user')
-    if (!user) return null
-    return JSON.parse(user).role
+    const res = await fetch('/api/auth/session')
+    if (!res.ok) return null
+    const session = await res.json()
+    return session?.user?.role ?? null
   },
 
   getIdentity: async () => {
-    const user = localStorage.getItem('ra-user')
-    if (!user) throw new Error('No identity')
-    const parsed = JSON.parse(user)
-    return { id: parsed.id, fullName: parsed.email }
+    const res = await fetch('/api/auth/session')
+    if (!res.ok) throw new Error('No identity')
+    const session = await res.json()
+    if (!session || !session.user) throw new Error('No identity')
+    return {
+      id: session.user.email ?? 'admin',
+      fullName: session.user.email ?? 'Admin',
+    }
   },
 }

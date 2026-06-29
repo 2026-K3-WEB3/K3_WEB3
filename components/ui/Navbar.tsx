@@ -37,10 +37,11 @@ export function Navbar() {
     position: 'sticky',
     top: 0,
     zIndex: 50,
-    background: 'rgba(15,15,26,0.7)',
+    background: 'var(--navbar-bg)',
     backdropFilter: 'blur(24px)',
     WebkitBackdropFilter: 'blur(24px)',
     borderBottom: '1px solid var(--border-subtle)',
+    transition: 'background var(--transition-base)',
   }
 
   const containerStyle: React.CSSProperties = {
@@ -186,7 +187,9 @@ export function Navbar() {
         <div
           className="flex md:hidden flex-col animate-slide-up"
           style={{
-            background: 'rgba(15,15,26,0.95)',
+            background: 'var(--navbar-bg)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
             borderTop: '1px solid var(--border-subtle)',
             padding: '0.75rem 1.5rem 1rem',
             gap: '0.25rem',

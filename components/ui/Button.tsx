@@ -96,9 +96,9 @@ export function Button({
       onMouseLeave={(e) => {
         const el = e.currentTarget
         el.style.transform = ''
-        el.style.background = variantStyles[variant].background ?? ''
-        el.style.boxShadow = variantStyles[variant].boxShadow ?? ''
-        el.style.color = variantStyles[variant].color ?? ''
+        el.style.background = variantStyles[variant].background as string ?? ''
+        el.style.boxShadow = variantStyles[variant].boxShadow as string ?? ''
+        el.style.color = variantStyles[variant].color as string ?? ''
       }}
       onMouseDown={(e) => {
         if (!disabled) e.currentTarget.style.transform = 'scale(0.96)'

@@ -1,29 +1,83 @@
 import Link from 'next/link'
-import { Calendar} from 'lucide-react'
+import { Calendar } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-200 mt-auto">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-gray-600">
-            <Calendar className="w-5 h-5 text-blue-600" />
-            <span className="font-semibold text-gray-800">EventSync</span>
-            <span className="text-gray-400">·</span>
-            <span className="text-sm">Gestion d&apos;événements en temps réel</span>
+    <footer
+      style={{
+        background: 'var(--bg-surface)',
+        borderTop: '1px solid var(--border-subtle)',
+        marginTop: 'auto',
+      }}
+    >
+      <div
+        style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '2.5rem 1.5rem',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '2rem',
+          alignItems: 'start',
+        }}
+      >
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
+            <Calendar size={18} style={{ color: 'var(--accent-from)' }} />
+            <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>EventSync</span>
           </div>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+            Gestion d&apos;événements en temps réel.
+          </p>
+        </div>
 
-          <nav className="flex items-center gap-6 text-sm text-gray-500">
-            <Link href="/" className="hover:text-gray-800 transition-colors">Accueil</Link>
-            <Link href="/speakers" className="hover:text-gray-800 transition-colors">Intervenants</Link>
-            <Link href="/favorites" className="hover:text-gray-800 transition-colors">Favoris</Link>
-          </nav>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>
+            Navigation
+          </span>
+          {[
+            { href: '/', label: 'Accueil' },
+            { href: '/speakers', label: 'Intervenants' },
+            { href: '/favorites', label: 'Favoris' },
+            { href: '/admin', label: 'Admin' },
+          ].map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              style={{
+                fontSize: '0.875rem',
+                color: 'var(--text-secondary)',
+                textDecoration: 'none',
+                transition: 'color var(--transition-fast)',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
 
-          <p className="text-xs text-gray-400">
-            © {new Date().getFullYear()} EventSync. Tous droits réservés.
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>
+            Légal
+          </span>
+          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            © {new Date().getFullYear()} EventSync.
+          </p>
+          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            Tous droits réservés.
           </p>
         </div>
       </div>
+
+      <div
+        style={{
+          height: '2px',
+          background: 'linear-gradient(90deg, transparent, var(--accent-from), var(--accent-to), transparent)',
+          opacity: 0.4,
+        }}
+      />
     </footer>
   )
 }

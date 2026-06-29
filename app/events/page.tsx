@@ -3,52 +3,113 @@ import { EventCard } from '@/components/events/EventCard'
 import { Calendar } from 'lucide-react'
 
 export const metadata = {
-    title: 'Événements — EventSync',
+  title: 'Événements — EventSync',
 }
 
 async function getEvents() {
-    return prisma.event.findMany({
+  return prisma.event.findMany({
+    include: {
+      sessions: {
         include: {
-            sessions: {
-                include: {
-                    room: true,
-                    speakers: { include: { speaker: true } },
-                },
-            },
+          room: true,
+          speakers: { include: { speaker: true } },
         },
-        orderBy: { startDate: 'asc' },
-    })
+      },
+    },
+    orderBy: { startDate: 'asc' },
+  })
 }
 
 export default async function EventsPage() {
-    const events = await getEvents()
+  const events = await getEvents()
 
-    return (
-        <div className="min-h-screen bg-gray-50">
-            <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16">
-                <div className="container mx-auto px-4">
-                    <div className="flex items-center gap-3 mb-4">
-                        <Calendar className="w-8 h-8" />
-                        <h1 className="text-3xl md:text-4xl font-bold">Événements</h1>
-                    </div>
-                    <p className="text-lg opacity-90">Tous les événements disponibles sur EventSync.</p>
-                </div>
-            </section>
+  return (
+    <div style={{ minHeight: '100vh' }}>
+      <section
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          padding: '5rem 1.5rem 4rem',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99,102,241,0.14) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
 
-            <section className="container mx-auto px-4 py-12">
-                {events.length === 0 ? (
-                    <div className="text-center py-20 text-gray-500">
-                        <Calendar className="w-12 h-12 mx-auto mb-4 opacity-40" />
-                        <p className="text-lg">Aucun événement pour le moment.</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {events.map((event) => (
-                            <EventCard key={event.id} event={event} />
-                        ))}
-                    </div>
-                )}
-            </section>
+        <div style={{ position: 'relative', maxWidth: '640px', margin: '0 auto' }}>
+          <div
+            style={{
+              width: '52px',
+              height: '52px',
+              borderRadius: 'var(--radius-lg)',
+              background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem',
+              boxShadow: '0 4px 20px rgba(99,102,241,0.4)',
+            }}
+          >
+            <Calendar size={24} color="#fff" />
+          </div>
+          <h1
+            className="animate-slide-up"
+            style={{
+              fontSize: 'clamp(2rem, 5vw, 3rem)',
+              fontWeight: 900,
+              letterSpacing: '-0.025em',
+              color: 'var(--text-primary)',
+              marginBottom: '0.75rem',
+            }}
+          >
+            Événements
+          </h1>
+          <p
+            className="animate-slide-up"
+            style={{ color: 'var(--text-secondary)', fontSize: '1rem', animationDelay: '80ms' }}
+          >
+            Tous les événements disponibles sur EventSync.
+          </p>
         </div>
-    )
+      </section>
+
+      <section
+        style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '1rem 1.5rem 5rem',
+        }}
+      >
+        {events.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
+            <Calendar size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
+            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
+              Aucun événement pour le moment.
+            </p>
+          </div>
+        ) : (
+          <div
+            className="stagger"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+              gap: '1.25rem',
+            }}
+          >
+            {events.map((event) => (
+              <div key={event.id} className="animate-slide-up">
+                <EventCard event={event} />
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  )
 }

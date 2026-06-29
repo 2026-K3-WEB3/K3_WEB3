@@ -12,11 +12,7 @@ async function getSpeakers() {
     include: {
       sessions: {
         include: {
-          session: {
-            include: {
-              event: true,
-            },
-          },
+          session: { include: { event: true } },
         },
       },
     },
@@ -28,56 +24,166 @@ export default async function SpeakersPage() {
   const speakers = await getSpeakers()
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-3 mb-4">
-            <Users className="w-8 h-8" />
-            <h1 className="text-3xl md:text-4xl font-bold">Intervenants</h1>
+    <div style={{ minHeight: '100vh' }}>
+      <section
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          padding: '5rem 1.5rem 4rem',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139,92,246,0.14) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        <div style={{ position: 'relative', maxWidth: '640px', margin: '0 auto' }}>
+          <div
+            style={{
+              width: '52px',
+              height: '52px',
+              borderRadius: 'var(--radius-lg)',
+              background: 'linear-gradient(135deg, #8b5cf6, #a855f7)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem',
+              boxShadow: '0 4px 20px rgba(139,92,246,0.4)',
+            }}
+          >
+            <Users size={24} color="#fff" />
           </div>
-          <p className="text-lg opacity-90">
+          <h1
+            className="animate-slide-up"
+            style={{
+              fontSize: 'clamp(2rem, 5vw, 3rem)',
+              fontWeight: 900,
+              letterSpacing: '-0.025em',
+              color: 'var(--text-primary)',
+              marginBottom: '0.75rem',
+            }}
+          >
+            Intervenants
+          </h1>
+          <p
+            className="animate-slide-up"
+            style={{ color: 'var(--text-secondary)', fontSize: '1rem', animationDelay: '80ms' }}
+          >
             Découvrez les experts et professionnels qui animent nos événements.
           </p>
         </div>
       </section>
 
-      {/* Speakers Grid */}
-      <section className="container mx-auto px-4 py-12">
+      <section
+        style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '1rem 1.5rem 5rem',
+        }}
+      >
         {speakers.length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
-            <Users className="w-12 h-12 mx-auto mb-4 opacity-40" />
-            <p className="text-lg">Aucun intervenant enregistré pour le moment.</p>
+          <div style={{ textAlign: 'center', padding: '5rem 1rem', color: 'var(--text-muted)' }}>
+            <Users size={48} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
+            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
+              Aucun intervenant enregistré pour le moment.
+            </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div
+            className="stagger"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+              gap: '1.25rem',
+            }}
+          >
             {speakers.map((speaker) => (
               <Link
                 key={speaker.id}
                 href={`/speakers/${speaker.id}`}
-                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group"
+                className="card-hover animate-slide-up"
+                style={{
+                  display: 'block',
+                  textDecoration: 'none',
+                  background: 'var(--bg-surface)',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid var(--border-subtle)',
+                  overflow: 'hidden',
+                }}
               >
-                <div className="p-6 flex flex-col items-center text-center">
+                <div style={{ padding: '2rem 1.5rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.75rem' }}>
                   {speaker.photo ? (
                     <img
                       src={speaker.photo}
                       alt={speaker.name}
-                      className="w-20 h-20 rounded-full object-cover mb-4 ring-2 ring-blue-100 group-hover:ring-blue-400 transition-all"
+                      style={{
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        border: '2px solid rgba(99,102,241,0.3)',
+                        boxShadow: '0 0 0 4px rgba(99,102,241,0.1)',
+                      }}
                     />
                   ) : (
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-2xl font-bold mb-4 group-hover:scale-105 transition-transform">
+                    <div
+                      style={{
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.75rem',
+                        fontWeight: 800,
+                        color: '#fff',
+                        boxShadow: '0 0 0 4px rgba(99,102,241,0.15), 0 4px 20px rgba(99,102,241,0.3)',
+                      }}
+                    >
                       {speaker.name.charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <h2 className="font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
-                    {speaker.name}
-                  </h2>
-                  {speaker.bio && (
-                    <p className="text-sm text-gray-500 mt-2 line-clamp-2">{speaker.bio}</p>
-                  )}
-                  <p className="text-xs text-gray-400 mt-3">
+
+                  <div>
+                    <h2 style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                      {speaker.name}
+                    </h2>
+                    {speaker.bio && (
+                      <p
+                        style={{
+                          fontSize: '0.8rem',
+                          color: 'var(--text-muted)',
+                          lineHeight: 1.5,
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {speaker.bio}
+                      </p>
+                    )}
+                  </div>
+
+                  <span
+                    style={{
+                      padding: '0.2rem 0.7rem',
+                      borderRadius: '99px',
+                      background: 'rgba(99,102,241,0.12)',
+                      border: '1px solid rgba(99,102,241,0.25)',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      color: '#a5b4fc',
+                    }}
+                  >
                     {speaker.sessions.length} session{speaker.sessions.length !== 1 ? 's' : ''}
-                  </p>
+                  </span>
                 </div>
               </Link>
             ))}

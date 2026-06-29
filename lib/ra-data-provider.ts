@@ -125,7 +125,7 @@ export const dataProvider: DataProvider = {
         })
       )
     )
-    return { data: params.ids }
+    return { data: params.ids as any }
   },
 
   delete: async (resource, params) => {
@@ -134,7 +134,7 @@ export const dataProvider: DataProvider = {
       method: 'DELETE',
     })
     if (!res.ok) throw new Error(`Failed to delete ${resource}/${params.id}`)
-    return { data: { id: params.id } as { id: string } }
+    return { data: { id: params.id } as any }
   },
 
   deleteMany: async (resource, params) => {
@@ -146,6 +146,6 @@ export const dataProvider: DataProvider = {
         })
       )
     )
-    return { data: params.ids }
+    return { data: params.ids as any }
   },
 }
